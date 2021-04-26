@@ -51,7 +51,9 @@ public class SearchRvAdapter extends RecyclerView.Adapter<SearchRvAdapter.MyHold
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onItemClick(mList.get(position));
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(mList.get(position));
+                }
 
             }
         });
