@@ -9,16 +9,24 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 
 import java.util.List;
 
-public class WatchlistRvAdapter extends RecyclerView.Adapter<WatchlistRvAdapter.MyHolder> {
+public class RecommendedRvAdapter extends RecyclerView.Adapter<RecommendedRvAdapter.MyHolder> {
 
     private List<VideoData> mList;
+
     private OnItemClickListener mOnItemClickListener;
 
-    WatchlistRvAdapter(List<VideoData> list) {
+    public interface OnItemClickListener {
+        public void onItemClick(VideoData data);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    RecommendedRvAdapter(List<VideoData> list) {
         mList = list;
     }
 
@@ -26,57 +34,30 @@ public class WatchlistRvAdapter extends RecyclerView.Adapter<WatchlistRvAdapter.
         this.mList = mList;
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(VideoData data);
-
-        public void onItemRemoveClick(VideoData data);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
-    }
 
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //将我们自定义的item布局R.layout.item_one转换为View
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_watchlist, parent, false);
+                .inflate(R.layout.item_img, parent, false);
         //将view传递给我们自定义的ViewHolder
         MyHolder holder = new MyHolder(view);
         //返回这个MyHolder实体
         return holder;
+
     }
 
     //通过方法提供的ViewHolder，将数据绑定到ViewHolder中
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
-
-        holder.img.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(mList.get(position));
                 }
-
             }
         });
-
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemRemoveClick(mList.get(position));
-                }
-            }
-        });
-        if ("movie".equals(mList.get(position).Media_type)){
-            StringBuilder type = new StringBuilder( mList.get(position).Media_type.toLowerCase());
-            type.setCharAt(0, Character.toUpperCase(type.charAt(0)));
-            holder.type.setText(type);
-        }else {
-            holder.type.setText(mList.get(position).Media_type.toUpperCase());
-        }
-
         Glide.with(holder.img.getContext()).load(mList.get(position).poster_path).placeholder(R.drawable.img_default).into(holder.img);
     }
 
@@ -93,15 +74,13 @@ public class WatchlistRvAdapter extends RecyclerView.Adapter<WatchlistRvAdapter.
     class MyHolder extends RecyclerView.ViewHolder {
 
         ImageView img;
-        ImageView remove;
-        TextView type;
+        ImageView more;
 
         public MyHolder(View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.img);
-            type = itemView.findViewById(R.id.type);
-            remove = itemView.findViewById(R.id.remove);
-
+            more = itemView.findViewById(R.id.more);
+            more.setVisibility(View.GONE);
         }
     }
 }

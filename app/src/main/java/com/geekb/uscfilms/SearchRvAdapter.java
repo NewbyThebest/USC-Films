@@ -1,5 +1,6 @@
 package com.geekb.uscfilms;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,9 +58,24 @@ public class SearchRvAdapter extends RecyclerView.Adapter<SearchRvAdapter.MyHold
 
             }
         });
+        VideoData data = mList.get(position);
 
 
-        Glide.with(holder.img.getContext()).load(mList.get(position).imgUrl).placeholder(R.drawable.img_default).into(holder.img);
+        holder.title.setText(data.name);
+        holder.score.setText(data.Rating);
+        String year = "";
+        if (!TextUtils.isEmpty(data.release_date)){
+            String []release_date = data.release_date.split("-");
+            year = release_date[0];
+        }
+        if (!TextUtils.isEmpty(year)){
+            holder.type.setText(data.Media_type.toUpperCase() + "("+year+")");
+        }else {
+            holder.type.setText(data.Media_type.toUpperCase());
+        }
+
+
+        Glide.with(holder.img.getContext()).load(data.backdrop_path).placeholder(R.drawable.img_default).into(holder.img);
     }
 
     //获取数据源总的条数

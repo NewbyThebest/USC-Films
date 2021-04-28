@@ -14,4 +14,11 @@
         </attr>
         <attr name="middle_page_cover" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="ReadMoreTextView">
+        <attr name="rmtMoreText" format="string"/>
+        <attr name="rmtMoreColor" format="color"/>
+        <attr name="rmtLessText" format="string"/>
+        <attr name="rmtLessColor" format="color"/>
+    </declare-styleable>
 </resources>

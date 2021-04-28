@@ -2,9 +2,11 @@ package com.geekb.uscfilms;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,8 @@ public class HomeFragment extends BaseFagment implements View.OnClickListener {
     private TabFragment mMovieFragment;
     private TabFragment mTVFragment;
     private int currentTag = 0;
+    private ViewGroup mWaiting;
+    private ViewGroup layout;
 
     @Nullable
     @Override
@@ -29,8 +33,25 @@ public class HomeFragment extends BaseFagment implements View.OnClickListener {
     void initView(View view) {
         mTvMovie = view.findViewById(R.id.tv_movie);
         mTvTV = view.findViewById(R.id.tv_TV);
+        mWaiting = view.findViewById(R.id.waiting);
+        layout = view.findViewById(R.id.layout);
         mTvMovie.setOnClickListener(this);
         mTvTV.setOnClickListener(this);
+        if (MainManager.getInstance().isShowWaiting){
+            MainManager.getInstance().isShowWaiting = false;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    layout.setVisibility(View.VISIBLE);
+                    mWaiting.setVisibility(View.GONE);
+
+                }
+            },2000);
+        }else {
+            layout.setVisibility(View.VISIBLE);
+            mWaiting.setVisibility(View.GONE);
+        }
+
         jumpToMoviePage();
     }
 
